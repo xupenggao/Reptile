@@ -24,7 +24,7 @@ public class FileDownload {
      * @param path  要保存的路径及文件名
      * @return boolean
      */
-    private static boolean download(String url, String path){
+    public static boolean download(String url, String path){
         boolean flag = false;
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
