@@ -26,7 +26,6 @@ public class FileDownload {
      */
     public static boolean download(String url, String path){
         boolean flag = false;
-
         CloseableHttpClient httpclient = HttpClients.createDefault();
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(2000)
                 .setConnectTimeout(2000).build();
