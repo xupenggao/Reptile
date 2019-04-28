@@ -42,7 +42,7 @@ public class FileDownload {
                     File file = new File(path);
                     out = new BufferedOutputStream(new FileOutputStream(file));
                     byte[] buffer = new byte[1024];
-                    int len = -1;
+                    int len;
                     while((len = in.read(buffer,0,1024)) > -1){
                         out.write(buffer,0,len);
                     }

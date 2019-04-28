@@ -19,17 +19,19 @@ import java.util.regex.Pattern;
  **/
 public class SpiderKugou {
 
-    public static String filePath = "E:/KuGou";
+    public static String filePath = "E:/KuGou/";
     public static String mp3 = "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&callback=jQuery19106959134040591868_1556372858229&"
             +"hash=HASH&album_id=0&_=TIME";
     public static String link = "https://www.kugou.com/yy/rank/home/PAGE-8888.html?from=rank";
 
     public static void main(String[] args) throws IOException {
+//        FileDownload.download("http://fs.w.kugou.com/201904282243/66394816e29cca6e228e41c5d0e2e12d/G135/M06/17/13/xw0DAFtHOJOACZiNAEUe3eVFTx8339.mp3",filePath+"/于文文 - 体面.mp3");
         System.out.println("--------------------------------------start spider task------------------------------------");
-        for (int i = 1;i < 23; i++){
-            String url = link.replace("PAGE", new StringBuffer(i));
+/*        for (int i = 1;i < 23; i++){
+            String url = link.replace("PAGE", i+"");
             getTitle(url);
-        }
+        }*/
+        getTitle("https://www.kugou.com/yy/rank/home/2-8888.html?from=rank");
         System.out.println("-------------------------------------下载完成---------------------------------");
     }
 
@@ -52,7 +54,6 @@ public class SpiderKugou {
         String hash = "";
         HttpGetConnect connect = new HttpGetConnect();
         String content = connect.connect(url, "UTF-8");
-        HtmlManage html = new HtmlManage();
 
         String regx = "\"hash\":\"[0-9A-Z]+\"";
         Pattern pattern = Pattern.compile(regx);
@@ -64,17 +65,19 @@ public class SpiderKugou {
         }
         String item = mp3.replace("HASH",hash);
         item = item.replace("TIME",System.currentTimeMillis()+"");
-        System.out.println("item ===>>"+item);
+//        System.out.println("item ===>>"+item);
 
         String mp = connect.connect(item,"UTF-8");
         mp = mp.substring(mp.indexOf("(")+1,mp.length()-3);
         JSONObject jsonObject = JSONObject.fromObject(mp);
         String playUrl = jsonObject.getJSONObject("data").getString("play_url");
-        System.out.println("playUrl==>>"+playUrl);
-
-        FileDownload down = new FileDownload();
-        down.download(playUrl,filePath + name + ".mp3");
-        System.out.println("-------------------------------------("+name+")下载完成---------------------------------");
+        if (playUrl!=null && !"".equals(playUrl)) {
+            FileDownload.download(playUrl, filePath + name + ".mp3");
+            System.out.println("-------------------------------------(" + name + ")下载完成---------------------------------");
+        }else {
+            System.out.println("--------------------------------(" + name + ")为付费歌曲,下载失败--------------------------------");
+            return null;
+        }
         return playUrl;
     }
 }
