@@ -36,8 +36,7 @@ public class SpiderKugou {
     }
 
     public static void getTitle(String url) throws IOException {
-        HttpGetConnect connect = new HttpGetConnect();
-        String content = connect.connect(url, "UTF-8");
+        String content = HttpGetConnect.connect(url, "UTF-8");
         HtmlManage html = new HtmlManage();
         Document doc = html.manage(content);
         Element ele = doc.getElementsByClass("pc_temp_songlist").get(0);
@@ -52,8 +51,7 @@ public class SpiderKugou {
 
     public static String download(String url, String name) throws IOException {
         String hash = "";
-        HttpGetConnect connect = new HttpGetConnect();
-        String content = connect.connect(url, "UTF-8");
+        String content = HttpGetConnect.connect(url, "UTF-8");
 
         String regx = "\"hash\":\"[0-9A-Z]+\"";
         Pattern pattern = Pattern.compile(regx);
@@ -67,7 +65,7 @@ public class SpiderKugou {
         item = item.replace("TIME",System.currentTimeMillis()+"");
 //        System.out.println("item ===>>"+item);
 
-        String mp = connect.connect(item,"UTF-8");
+        String mp = HttpGetConnect.connect(item,"UTF-8");
         mp = mp.substring(mp.indexOf("(")+1,mp.length()-3);
         JSONObject jsonObject = JSONObject.fromObject(mp);
         String playUrl = jsonObject.getJSONObject("data").getString("play_url");
